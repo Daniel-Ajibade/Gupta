@@ -181,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
             const state = document.getElementById('state').value;
             const quantity = document.getElementById('quantity').value;
-            const delivery = document.querySelector('input[name="delivery"]:checked');
 
             // Validation checks
             let errors = [];
@@ -193,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!deliveryAddress) errors.push('Please enter your delivery address');
             if (!state) errors.push('Please select your state');
             if (!quantity) errors.push('Please select a package');
-            if (!delivery) errors.push('Please select delivery duration');
 
             // Check if phone numbers match
             if (phoneNumber && phoneNumberConfirm && phoneNumber !== phoneNumberConfirm) {
