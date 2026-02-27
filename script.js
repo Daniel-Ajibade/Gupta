@@ -356,3 +356,154 @@ if ('loading' in HTMLImageElement.prototype) {
       });
     }
   });
+
+/* ===== QUIZ ===== */
+const gAnswers = { q1: null, q2: null };
+
+function gSelect(el, step) {
+  el.closest('.q-opts').querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  gAnswers['q' + step] = el.dataset.value;
+  document.getElementById('gnext' + step).disabled = false;
+}
+
+function gToggleMulti(el) {
+  el.classList.toggle('selected');
+  const any = el.closest('.q-opts').querySelectorAll('.selected').length > 0;
+  document.getElementById('gnext3').disabled = !any;
+}
+
+function gNext(cur) {
+  document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
+  document.querySelector('[data-step="' + (cur + 1) + '"]').classList.add('active');
+  gUpdateProg(cur + 1);
+}
+
+function gPrev(cur) {
+  document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
+  document.querySelector('[data-step="' + (cur - 1) + '"]').classList.add('active');
+  gUpdateProg(cur - 1);
+}
+
+function gUpdateProg(step) {
+  document.getElementById('gProg').style.width = (((step - 1) / 3) * 100) + '%';
+}
+
+function gShowResult() {
+  let score = 0;
+  if (gAnswers.q1 === 'active')   score += 1;
+  if (gAnswers.q1 === 'chronic')  score += 2;
+  if (gAnswers.q2 === 'active')   score += 1;
+  if (gAnswers.q2 === 'chronic')  score += 2;
+
+  // bonus if surgery mentioned or multiple treatments tried
+  const q3Selected = document.querySelectorAll('#gopts3 .selected');
+  q3Selected.forEach(el => { if (el.dataset.value === '1') score += 1; });
+
+  let html = '';
+
+  if (score <= 1) {
+    // EARLY — recommend 2 bottles
+    html = `
+      <div class="res-badge early">● Early Stage Detected</div>
+      <h3>Your Symptoms Are Early — Act Now Before They Progress</h3>
+      <p class="res-desc">Your prostate condition is at an early stage. This is the best time to treat it — when the prostate is still manageable and full restoration is most achievable. Two bottles will give your body the complete treatment window it needs.</p>
+      <div class="res-pkg">
+        <div class="pkg-lbl">Your Recommended Package</div>
+        <div class="pkg-name">Value Package — 2 Bottles</div>
+        <div class="pkg-price">₦40,000 <s>₦45,000</s></div>
+        <p class="pkg-note">1-month supply. Enough time to shrink the prostate, restore urinary flow, and address the root inflammation. Do not stop at 1 bottle — the second bottle is what cements the results.</p>
+      </div>
+      <a href="#order-form" class="q-cta">✅ Order My 2-Bottle Package Now</a>
+      <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
+  } else if (score <= 3) {
+    // ACTIVE — recommend 3 bottles
+    html = `
+      <div class="res-badge active">● Active Stage BPH</div>
+      <h3>Your Prostate Needs a Full Treatment Cycle to Heal Properly</h3>
+      <p class="res-desc">Your symptoms suggest the prostate has been enlarging for some time with significant impact on your daily life. A full 45-day treatment cycle is needed to properly shrink the prostate, correct the inflammation, and prevent it from returning.</p>
+      <div class="res-pkg">
+        <div class="pkg-lbl">Your Recommended Package</div>
+        <div class="pkg-name">Complete Package — 3 Bottles ✅ Treat Once and For All</div>
+        <div class="pkg-price">₦50,000 <s>₦55,000</s></div>
+        <p class="pkg-note">45-day complete treatment. This is the package most men at your stage need for full and lasting restoration. Stopping early is the number one reason treatments fail — 3 bottles ensures you complete the full cycle.</p>
+      </div>
+      <a href="#order-form" class="q-cta">✅ Order My 3-Bottle Complete Package Now</a>
+      <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
+  } else {
+    // CHRONIC — recommend 3 or 4 bottles
+    html = `
+      <div class="res-badge chronic">● Chronic / Advanced Stage</div>
+      <h3>Your Condition Is Advanced — A Full Extended Treatment Is Critical</h3>
+      <p class="res-desc">Based on your answers, your prostate has been significantly enlarged for a long time with severe or multiple symptoms. To achieve full restoration and ensure the prostate does not continue to grow, an extended treatment cycle of 2 months is strongly recommended.</p>
+      <div class="res-pkg-duo">
+        <div class="res-pkg">
+          <div class="pkg-lbl">Option A — Good</div>
+          <div class="pkg-name">Complete Package — 3 Bottles</div>
+          <div class="pkg-price">₦50,000 <s>₦55,000</s></div>
+          <p class="pkg-note">45-day supply. Solid choice for advanced cases.</p>
+        </div>
+        <div class="res-pkg highlight">
+          <div class="pkg-lbl">⭐ Option B — Best for Your Stage</div>
+          <div class="pkg-name">Premium Package — 4 Bottles</div>
+          <div class="pkg-price">₦65,000 <s>₦70,000</s></div>
+          <p class="pkg-note">2-month supply. Most recommended for chronic/long-standing prostate enlargement. Gives maximum time for full prostate correction and prevents recurrence.</p>
+        </div>
+      </div>
+      <a href="#order-form" class="q-cta">✅ Order My Recommended Package Now</a>
+      <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
+  }
+
+  document.getElementById('gProg').style.width = '100%';
+  document.getElementById('gQuizBody').style.display = 'none';
+  const resultEl = document.getElementById('gResult');
+  resultEl.innerHTML = html;
+  resultEl.classList.add('show');
+}
+
+function gRetake() {
+  gAnswers.q1 = null; gAnswers.q2 = null;
+  document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+  ['gnext1','gnext2','gnext3'].forEach(id => document.getElementById(id).disabled = true);
+  document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
+  document.querySelector('[data-step="1"]').classList.add('active');
+  document.getElementById('gResult').classList.remove('show');
+  document.getElementById('gResult').innerHTML = '';
+  document.getElementById('gQuizBody').style.display = 'block';
+  document.getElementById('gProg').style.width = '0%';
+}
+
+/* ===== COMMENTS ===== */
+function gLike(btn) {
+  const countEl = btn.querySelector('span');
+  let c = parseInt(countEl.textContent);
+  if (btn.classList.contains('liked')) {
+    btn.classList.remove('liked');
+    countEl.textContent = c - 1;
+  } else {
+    btn.classList.add('liked');
+    countEl.textContent = c + 1;
+  }
+}
+
+function gSendComment() {
+  const input = document.getElementById('gComInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const compose = document.querySelector('.com-compose');
+  const item = document.createElement('div');
+  item.className = 'com-item';
+  item.innerHTML = `
+    <div class="com-av">👤</div>
+    <div class="com-body">
+      <div class="com-name">You</div>
+      <p class="com-text">${text.replace(/</g,'&lt;')}</p>
+      <div class="com-meta">
+        <button class="com-like" onclick="gLike(this)">👍 Like <span>0</span></button>
+        <button class="com-reply-btn">Reply</button>
+        <span>Just now</span>
+      </div>
+    </div>`;
+  compose.parentNode.insertBefore(item, compose);
+  input.value = '';
+}
