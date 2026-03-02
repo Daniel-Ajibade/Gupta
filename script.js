@@ -210,9 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Please fix the following errors:\n\n' + errors.join('\n'));
                 return false;
             }
-
-            // Redirect to thank you page on success
-            window.location.href = 'thanks.html';
         });
 
         // Real-time phone number matching validation
