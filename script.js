@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Array of Nigerian names and cities
     const nigerianNames = [
-{ name: 'Chinedu', city: 'Lagos' },
+        { name: 'Chinedu', city: 'Lagos' },
         { name: 'Ibrahim', city: 'Kano' },
         { name: 'Emeka', city: 'Port Harcourt' },
         { name: 'Adewale', city: 'Ibadan' },
@@ -211,9 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return false;
             }
 
-            // If validation passes, form will submit to Formspree
-            // Show success message (optional - Formspree handles this)
-            alert('Thank you! Your order has been submitted. We will contact you within 2 hours to confirm your order.');
+            // Redirect to thank you page on success
+            window.location.href = 'thanks.html';
         });
 
         // Real-time phone number matching validation
@@ -329,82 +328,82 @@ if ('loading' in HTMLImageElement.prototype) {
 // END OF SCRIPT
 // ============================================
 
-  document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 
-  document.addEventListener("keydown", e => {
+document.addEventListener("keydown", e => {
     if (
-    e.ctrlKey &&
-    (e.key === "u" ||
-    e.key === "U" ||
-    e.key === "c" ||
-    e.key === "C" ||
-    e.key === "s" ||
-    e.key === "S" ||
-    e.key === "i" ||
-    e.key === "I")
+        e.ctrlKey &&
+        (e.key === "u" ||
+            e.key === "U" ||
+            e.key === "c" ||
+            e.key === "C" ||
+            e.key === "s" ||
+            e.key === "S" ||
+            e.key === "i" ||
+            e.key === "I")
     ) {
         e.preventDefault();
     }
-  });
-  document.getElementById("stickyCtaBtn").addEventListener("click", function () {
+});
+document.getElementById("stickyCtaBtn").addEventListener("click", function () {
     const orderForm = document.getElementById("orderFormElement");
 
     if (orderForm) {
-      orderForm.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+        orderForm.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     }
-  });
+});
 
 /* ===== QUIZ ===== */
 const gAnswers = { q1: null, q2: null };
 
 function gSelect(el, step) {
-  el.closest('.q-opts').querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  gAnswers['q' + step] = el.dataset.value;
-  document.getElementById('gnext' + step).disabled = false;
+    el.closest('.q-opts').querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    gAnswers['q' + step] = el.dataset.value;
+    document.getElementById('gnext' + step).disabled = false;
 }
 
 function gToggleMulti(el) {
-  el.classList.toggle('selected');
-  const any = el.closest('.q-opts').querySelectorAll('.selected').length > 0;
-  document.getElementById('gnext3').disabled = !any;
+    el.classList.toggle('selected');
+    const any = el.closest('.q-opts').querySelectorAll('.selected').length > 0;
+    document.getElementById('gnext3').disabled = !any;
 }
 
 function gNext(cur) {
-  document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
-  document.querySelector('[data-step="' + (cur + 1) + '"]').classList.add('active');
-  gUpdateProg(cur + 1);
+    document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
+    document.querySelector('[data-step="' + (cur + 1) + '"]').classList.add('active');
+    gUpdateProg(cur + 1);
 }
 
 function gPrev(cur) {
-  document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
-  document.querySelector('[data-step="' + (cur - 1) + '"]').classList.add('active');
-  gUpdateProg(cur - 1);
+    document.querySelector('[data-step="' + cur + '"]').classList.remove('active');
+    document.querySelector('[data-step="' + (cur - 1) + '"]').classList.add('active');
+    gUpdateProg(cur - 1);
 }
 
 function gUpdateProg(step) {
-  document.getElementById('gProg').style.width = (((step - 1) / 3) * 100) + '%';
+    document.getElementById('gProg').style.width = (((step - 1) / 3) * 100) + '%';
 }
 
 function gShowResult() {
-  let score = 0;
-  if (gAnswers.q1 === 'active')   score += 1;
-  if (gAnswers.q1 === 'chronic')  score += 2;
-  if (gAnswers.q2 === 'active')   score += 1;
-  if (gAnswers.q2 === 'chronic')  score += 2;
+    let score = 0;
+    if (gAnswers.q1 === 'active') score += 1;
+    if (gAnswers.q1 === 'chronic') score += 2;
+    if (gAnswers.q2 === 'active') score += 1;
+    if (gAnswers.q2 === 'chronic') score += 2;
 
-  // bonus if surgery mentioned or multiple treatments tried
-  const q3Selected = document.querySelectorAll('#gopts3 .selected');
-  q3Selected.forEach(el => { if (el.dataset.value === '1') score += 1; });
+    // bonus if surgery mentioned or multiple treatments tried
+    const q3Selected = document.querySelectorAll('#gopts3 .selected');
+    q3Selected.forEach(el => { if (el.dataset.value === '1') score += 1; });
 
-  let html = '';
+    let html = '';
 
-  if (score <= 1) {
-    // EARLY — recommend 2 bottles
-    html = `
+    if (score <= 1) {
+        // EARLY — recommend 2 bottles
+        html = `
       <div class="res-badge early">● Early Stage Detected</div>
       <h3>Your Symptoms Are Early — Act Now Before They Progress</h3>
       <p class="res-desc">Your prostate condition is at an early stage. This is the best time to treat it — when the prostate is still manageable and full restoration is most achievable. Two bottles will give your body the complete treatment window it needs.</p>
@@ -416,9 +415,9 @@ function gShowResult() {
       </div>
       <a href="#order-form" class="q-cta">✅ Order My 2-Bottle Package Now</a>
       <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
-  } else if (score <= 3) {
-    // ACTIVE — recommend 3 bottles
-    html = `
+    } else if (score <= 3) {
+        // ACTIVE — recommend 3 bottles
+        html = `
       <div class="res-badge active">● Active Stage BPH</div>
       <h3>Your Prostate Needs a Full Treatment Cycle to Heal Properly</h3>
       <p class="res-desc">Your symptoms suggest the prostate has been enlarging for some time with significant impact on your daily life. A full 45-day treatment cycle is needed to properly shrink the prostate, correct the inflammation, and prevent it from returning.</p>
@@ -430,9 +429,9 @@ function gShowResult() {
       </div>
       <a href="#order-form" class="q-cta">✅ Order My 3-Bottle Complete Package Now</a>
       <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
-  } else {
-    // CHRONIC — recommend 3 or 4 bottles
-    html = `
+    } else {
+        // CHRONIC — recommend 3 or 4 bottles
+        html = `
       <div class="res-badge chronic">● Chronic / Advanced Stage</div>
       <h3>Your Condition Is Advanced — A Full Extended Treatment Is Critical</h3>
       <p class="res-desc">Based on your answers, your prostate has been significantly enlarged for a long time with severe or multiple symptoms. To achieve full restoration and ensure the prostate does not continue to grow, an extended treatment cycle of 2 months is strongly recommended.</p>
@@ -452,58 +451,58 @@ function gShowResult() {
       </div>
       <a href="#order-form" class="q-cta">✅ Order My Recommended Package Now</a>
       <button class="q-retake" onclick="gRetake()">Retake Assessment</button>`;
-  }
+    }
 
-  document.getElementById('gProg').style.width = '100%';
-  document.getElementById('gQuizBody').style.display = 'none';
-  const resultEl = document.getElementById('gResult');
-  resultEl.innerHTML = html;
-  resultEl.classList.add('show');
+    document.getElementById('gProg').style.width = '100%';
+    document.getElementById('gQuizBody').style.display = 'none';
+    const resultEl = document.getElementById('gResult');
+    resultEl.innerHTML = html;
+    resultEl.classList.add('show');
 }
 
 function gRetake() {
-  gAnswers.q1 = null; gAnswers.q2 = null;
-  document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
-  ['gnext1','gnext2','gnext3'].forEach(id => document.getElementById(id).disabled = true);
-  document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
-  document.querySelector('[data-step="1"]').classList.add('active');
-  document.getElementById('gResult').classList.remove('show');
-  document.getElementById('gResult').innerHTML = '';
-  document.getElementById('gQuizBody').style.display = 'block';
-  document.getElementById('gProg').style.width = '0%';
+    gAnswers.q1 = null; gAnswers.q2 = null;
+    document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
+    ['gnext1', 'gnext2', 'gnext3'].forEach(id => document.getElementById(id).disabled = true);
+    document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
+    document.querySelector('[data-step="1"]').classList.add('active');
+    document.getElementById('gResult').classList.remove('show');
+    document.getElementById('gResult').innerHTML = '';
+    document.getElementById('gQuizBody').style.display = 'block';
+    document.getElementById('gProg').style.width = '0%';
 }
 
 /* ===== COMMENTS ===== */
 function gLike(btn) {
-  const countEl = btn.querySelector('span');
-  let c = parseInt(countEl.textContent);
-  if (btn.classList.contains('liked')) {
-    btn.classList.remove('liked');
-    countEl.textContent = c - 1;
-  } else {
-    btn.classList.add('liked');
-    countEl.textContent = c + 1;
-  }
+    const countEl = btn.querySelector('span');
+    let c = parseInt(countEl.textContent);
+    if (btn.classList.contains('liked')) {
+        btn.classList.remove('liked');
+        countEl.textContent = c - 1;
+    } else {
+        btn.classList.add('liked');
+        countEl.textContent = c + 1;
+    }
 }
 
 function gSendComment() {
-  const input = document.getElementById('gComInput');
-  const text = input.value.trim();
-  if (!text) return;
-  const compose = document.querySelector('.com-compose');
-  const item = document.createElement('div');
-  item.className = 'com-item';
-  item.innerHTML = `
+    const input = document.getElementById('gComInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const compose = document.querySelector('.com-compose');
+    const item = document.createElement('div');
+    item.className = 'com-item';
+    item.innerHTML = `
     <div class="com-av">👤</div>
     <div class="com-body">
       <div class="com-name">You</div>
-      <p class="com-text">${text.replace(/</g,'&lt;')}</p>
+      <p class="com-text">${text.replace(/</g, '&lt;')}</p>
       <div class="com-meta">
         <button class="com-like" onclick="gLike(this)">👍 Like <span>0</span></button>
         <button class="com-reply-btn">Reply</button>
         <span>Just now</span>
       </div>
     </div>`;
-  compose.parentNode.insertBefore(item, compose);
-  input.value = '';
+    compose.parentNode.insertBefore(item, compose);
+    input.value = '';
 }
