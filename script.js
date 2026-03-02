@@ -174,7 +174,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (orderForm) {
         orderForm.addEventListener('submit', function (e) {
-            // Get form fields
+            e.preventDefault(); // STOP normal submission
+
             const fullName = document.getElementById('fullName').value.trim();
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
             const phoneNumberConfirm = document.getElementById('phoneNumberConfirm').value.trim();
@@ -182,10 +183,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const state = document.getElementById('state').value;
             const quantity = document.getElementById('quantity').value;
 
-            // Validation checks
             let errors = [];
 
-            // Check if all required fields are filled
             if (!fullName) errors.push('Please enter your full name');
             if (!phoneNumber) errors.push('Please enter your phone number');
             if (!phoneNumberConfirm) errors.push('Please confirm your phone number');
@@ -193,24 +192,40 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!state) errors.push('Please select your state');
             if (!quantity) errors.push('Please select a package');
 
-            // Check if phone numbers match
             if (phoneNumber && phoneNumberConfirm && phoneNumber !== phoneNumberConfirm) {
                 errors.push('Phone numbers do not match');
             }
 
-            // Validate phone number format (Nigerian format)
             const phoneRegex = /^(\+234|234|0)[789][01]\d{8}$/;
             if (phoneNumber && !phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
                 errors.push('Please enter a valid Nigerian phone number');
             }
 
-            // If there are errors, prevent submission and show alert
             if (errors.length > 0) {
-                e.preventDefault();
                 alert('Please fix the following errors:\n\n' + errors.join('\n'));
-                return false;
+                return;
             }
+
+            // Send to Formspree manually
+            fetch(orderForm.action, {
+                method: 'POST',
+                body: new FormData(orderForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/thanks.html'; // force redirect
+                    } else {
+                        alert('Submission failed. Please try again.');
+                    }
+                })
+                .catch(() => {
+                    alert('Network error. Please try again.');
+                });
         });
+
 
         // Real-time phone number matching validation
         const phoneNumberInput = document.getElementById('phoneNumber');
