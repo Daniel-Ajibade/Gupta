@@ -130,11 +130,11 @@ body {
            ============================================ */
 .whatsapp-float {
   position: fixed;
-  bottom: 45px;
-  right: 20px;
+  bottom: 50px;
+  right: 5px;
   background: linear-gradient(135deg, #25d366, #128c7e);
   color: var(--white);
-  padding: var(--spacing-md);
+  /* padding: var(--spacing-md); */
   border-radius: 50px;
   box-shadow: var(--shadow-lg);
   text-decoration: none;
@@ -173,12 +173,12 @@ body {
 /* Mobile: Show only icon */
 @media (max-width: 768px) {
   .whatsapp-float {
-    padding: var(--spacing-md);
-    border-radius: 50%;
+    padding: 0.5rem;
+    /* border-radius: 50%; */
   }
-  .whatsapp-text {
+  /* .whatsapp-text {
     display: none;
-  }
+  } */
   .whatsapp-icon {
     font-size: 1.8rem;
   }
@@ -192,7 +192,7 @@ body {
   top: 80px;
   right: 20px;
   background: var(--white);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   z-index: 997;

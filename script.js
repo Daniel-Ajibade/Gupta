@@ -67,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Array of package options
     const packages = [
         '1 Bottle',
-        '2 Bottles + Diet Plan',
-        '3 Bottles + Diet Plan',
-        '4 Bottles + Diet Plan'
+        '2 Bottles',
+        '3 Bottles',
+        '4 Bottles'
     ];
 
     // Function to show notification
